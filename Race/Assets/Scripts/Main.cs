@@ -1,5 +1,5 @@
 ﻿using Controllers;
-using Models;
+using Tools.Ads;
 using UnityEngine;
 
 
@@ -7,10 +7,19 @@ public class Main : MonoBehaviour
 {
     [SerializeField]
     private Transform _placeForUi;
+    [SerializeField]
+    private UnityAdsShower _unityAdsShower;
 
-    private void Awake()
+    private MainController _mainController;
+
+    private void Start()
     {
-        MainController mainController = new MainController(_placeForUi);
+        _mainController = new MainController(_placeForUi, _unityAdsShower);
+    }
+
+    private void OnDestroy()
+    {
+        _mainController?.Dispose();
     }
 
 }

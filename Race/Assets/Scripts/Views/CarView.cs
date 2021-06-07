@@ -4,11 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace Views
 {
-    internal class CarView : MonoBehaviour, IPointerDownHandler
+    internal class CarView : MonoBehaviour
     {
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
