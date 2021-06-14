@@ -11,19 +11,22 @@ namespace Views
         [SerializeField]
         private Button _buttonStart;
         [SerializeField]
+        private Button _buttonBuy;
+        [SerializeField]
         private GameObject _trail;
 
         private GameObject _trailInstanse;
 
         private void Awake()
         {
-            _trailInstanse = GameObject.Instantiate(_trail);
+            _trailInstanse = Instantiate(_trail);
             _trailInstanse.SetActive(false);
         }
 
-        public void Init(UnityAction startGame)
+        public void Init(UnityAction startGame, UnityAction buyAction)
         {
             _buttonStart.onClick.AddListener(startGame);
+            _buttonBuy.onClick.AddListener(buyAction);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -48,6 +51,7 @@ namespace Views
         protected void OnDestroy()
         {
             _buttonStart.onClick.RemoveAllListeners();
+            _buttonBuy.onClick.RemoveAllListeners();
         }
 
         
