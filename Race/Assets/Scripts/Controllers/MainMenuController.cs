@@ -13,17 +13,28 @@ namespace Controllers
         private readonly ProfilePlayer _profilePlayer;
         private MainMenuView _view;
 
-        public MainMenuController(Transform placeForUi, ProfilePlayer profilePlayer)
+        public MainMenuController(Transform placeForUi, ProfilePlayer profilePlayer, ICameraTool cameraTool)
         {
             _profilePlayer = profilePlayer;
             _view = LoadView(placeForUi);
-            _view.Init(StartGame);
+            _view.Init(StartGame, Buy, cameraTool);
+            _profilePlayer.Shop.OnSuccessPurchase.SubscribeOnChange(PurchaseCompleted);
+        }
+
+        private void PurchaseCompleted()
+        {
+            Debug.Log("Покупка совершена.");
+        }
+
+        private void Buy()
+        {
+            _profilePlayer.Shop.Buy("1");
         }
 
         private MainMenuView LoadView(Transform placeForUi)
         {
             var prefab = ResourceLoader.LoadPrefab(_viewPath);
-            GameObject objectView = Object.Instantiate(prefab, placeForUi, false);
+            var objectView = Object.Instantiate(prefab, placeForUi, false);
             AddGameObjects(objectView);
             return objectView.GetComponent<MainMenuView>();
         }
@@ -31,6 +42,12 @@ namespace Controllers
         private void StartGame()
         {
             _profilePlayer.CurrentState.Value = GameState.Game;
+            _profilePlayer.AnalyticTools.SendMessage("start_game");
+        }
+
+        protected override void OnDispose()
+        {
+            _profilePlayer.Shop.OnSuccessPurchase.UnSubscriptionOnChange(PurchaseCompleted);
         }
     }
 }

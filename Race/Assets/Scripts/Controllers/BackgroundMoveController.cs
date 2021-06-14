@@ -29,7 +29,7 @@ namespace Controllers
 
         private BackgroundView LoadView()
         {
-            GameObject objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
+            var objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
             AddGameObjects(objView);
             return objView.GetComponent<BackgroundView>();
         }
