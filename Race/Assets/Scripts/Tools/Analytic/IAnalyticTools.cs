@@ -1,6 +1,6 @@
 ﻿namespace Tools.Analytic
 {
-    internal interface IAnalyticTools
+    public interface IAnalyticTools
     {
         void SendMessage(string eventName);
     }

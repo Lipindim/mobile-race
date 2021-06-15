@@ -1,4 +1,4 @@
-﻿internal enum GameState
+﻿public enum GameState
 {
     None = 0,
     Menu = 1, 

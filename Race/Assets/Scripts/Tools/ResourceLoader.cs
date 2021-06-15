@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Tools
 {
-    internal static class ResourceLoader
+    public static class ResourceLoader
     {
         public static Sprite LoadSprite(string path)
         {
@@ -12,6 +13,11 @@ namespace Tools
         public static GameObject LoadPrefab(string path)
         {
             return Resources.Load<GameObject>(path);
+        }
+
+        internal static T LoadObject<T>(string path)
+        {
+            return Resources.Load<GameObject>(path).GetComponent<T>();
         }
     }
 }

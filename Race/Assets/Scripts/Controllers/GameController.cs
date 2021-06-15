@@ -4,7 +4,7 @@ using Tools;
 
 namespace Controllers
 {
-    internal class GameController : BaseController
+    public class GameController : BaseController
     {
         public GameController(ProfilePlayer profilePlayer)
         {

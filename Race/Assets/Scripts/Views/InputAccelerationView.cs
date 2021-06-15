@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Views
 {
-    internal class InputAccelerationView : BaseInputView
+    public class InputAccelerationView : BaseInputView
     {
         public override void Init(SubscriptionProperty<float> leftMove, SubscriptionProperty<float> rightMove, float speed)
         {

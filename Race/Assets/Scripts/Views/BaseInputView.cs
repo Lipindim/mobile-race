@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Views
 {
-    internal abstract class BaseInputView : MonoBehaviour
+    public abstract class BaseInputView : MonoBehaviour
     {
         private SubscriptionProperty<float> _leftMove;
         private SubscriptionProperty<float> _rightMove;

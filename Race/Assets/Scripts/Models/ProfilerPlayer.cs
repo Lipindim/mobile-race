@@ -5,7 +5,7 @@ using Tools.Shop;
 
 namespace Models
 {
-    internal class ProfilePlayer
+    public class ProfilePlayer
     {
         public ProfilePlayer(float speedCar)
         {

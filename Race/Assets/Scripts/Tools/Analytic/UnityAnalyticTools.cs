@@ -4,7 +4,7 @@ using UnityEngine.Analytics;
 
 namespace Tools.Analytic
 {
-    internal class UnityAnalyticTools : IAnalyticTools
+    public class UnityAnalyticTools : IAnalyticTools
     {
         public void SendMessage(string eventName)
         {

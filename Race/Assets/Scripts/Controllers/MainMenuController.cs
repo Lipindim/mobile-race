@@ -1,4 +1,7 @@
-﻿using Models;
+﻿using Configs;
+using Models;
+using Shed;
+using System.Linq;
 using Tools;
 using UnityEngine;
 using Views;
@@ -6,18 +9,24 @@ using Views;
 
 namespace Controllers
 {
-    internal class MainMenuController : BaseController
+    public class MainMenuController : BaseController
     {
-        private readonly string _viewPath = "Prefabs/mainMenu";
-
+        private const string VIEW_PATH = "Prefabs/mainMenu";
+        private const string UPGRADES_CONFIG_PATH = "Configs/Upgrades/UpgradeItemConfigDataSource";
+        
+        private readonly Transform _placeForUi;
         private readonly ProfilePlayer _profilePlayer;
-        private MainMenuView _view;
 
-        public MainMenuController(Transform placeForUi, ProfilePlayer profilePlayer)
+        private MainMenuView _view;
+        private GameObject _viewObject;
+
+
+        public MainMenuController(Transform placeForUi, ProfilePlayer profilePlayer, ICameraTool cameraTool)
         {
+            _placeForUi = placeForUi;
             _profilePlayer = profilePlayer;
             _view = LoadView(placeForUi);
-            _view.Init(StartGame, Buy);
+            _view.Init(StartGame, Buy, OpenShed, cameraTool);
             _profilePlayer.Shop.OnSuccessPurchase.SubscribeOnChange(PurchaseCompleted);
         }
 
@@ -31,12 +40,30 @@ namespace Controllers
             _profilePlayer.Shop.Buy("1");
         }
 
+        private void OpenShed()
+        {
+            var upgradesConfig = Resources.Load<UpgradeItemConfigDataSource>(UPGRADES_CONFIG_PATH);
+            ShedController shedController = new ShedController(upgradesConfig.ItemConfigs.ToList(), _profilePlayer.CurrentCar, _placeForUi);
+            Hide();
+            shedController.Enter(Show);
+        }
+
+        private void Hide()
+        {
+            _viewObject.SetActive(false);
+        }
+
+        private void Show()
+        {
+            _viewObject.SetActive(true);
+        }
+
         private MainMenuView LoadView(Transform placeForUi)
         {
-            var prefab = ResourceLoader.LoadPrefab(_viewPath);
-            GameObject objectView = Object.Instantiate(prefab, placeForUi, false);
-            AddGameObjects(objectView);
-            return objectView.GetComponent<MainMenuView>();
+            var prefab = ResourceLoader.LoadPrefab(VIEW_PATH);
+            _viewObject = Object.Instantiate(prefab, placeForUi, false);
+            AddGameObjects(_viewObject);
+            return _viewObject.GetComponent<MainMenuView>();
         }
 
         private void StartGame()

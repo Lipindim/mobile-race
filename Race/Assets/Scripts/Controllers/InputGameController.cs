@@ -6,7 +6,7 @@ using Views;
 
 namespace Controllers
 {
-    internal class InputGameController : BaseController
+    public class InputGameController : BaseController
     {
         private BaseInputView _view;
 
@@ -21,7 +21,7 @@ namespace Controllers
 
         private BaseInputView LoadView()
         {
-            GameObject objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
+            var objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
             AddGameObjects(objView);
             return objView.GetComponent<BaseInputView>();
         }

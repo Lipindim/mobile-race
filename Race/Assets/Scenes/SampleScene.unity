@@ -464,6 +464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _placeForUi: {fileID: 1292068878}
   _unityAdsShower: {fileID: 2086461434}
+  _camera: {fileID: 519420031}
 --- !u!4 &2086461433
 Transform:
   m_ObjectHideFlags: 0

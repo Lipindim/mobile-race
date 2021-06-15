@@ -5,7 +5,7 @@ using Views;
 
 namespace Controllers
 {
-    internal class BackgroundMoveController : BaseController
+    public class BackgroundMoveController : BaseController
     {
         private BackgroundView _view;
         private SubscriptionProperty<float> _leftMove;
@@ -29,7 +29,7 @@ namespace Controllers
 
         private BackgroundView LoadView()
         {
-            GameObject objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
+            var objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
             AddGameObjects(objView);
             return objView.GetComponent<BackgroundView>();
         }

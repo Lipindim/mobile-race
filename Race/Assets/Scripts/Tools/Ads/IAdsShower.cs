@@ -1,6 +1,6 @@
 ﻿namespace Tools.Ads
 {
-    internal interface IAdsShower
+    public interface IAdsShower
     {
         void ShowInterstitial();
     }

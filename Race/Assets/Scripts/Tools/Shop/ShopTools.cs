@@ -5,7 +5,7 @@ using UnityEngine.Purchasing;
 
 namespace Tools.Shop
 {
-    internal class ShopTools : IShop, IStoreListener
+    public class ShopTools : IShop, IStoreListener
     {
         private IStoreController _controller;
         private IExtensionProvider _extensionProvider;
@@ -35,6 +35,7 @@ namespace Tools.Shop
         {
             if (!_isInitialized)
                 return;
+
             _controller.InitiatePurchase(id);
         }
 
@@ -74,9 +75,7 @@ namespace Tools.Shop
         public void RestorePurchase()
         {
             if (!_isInitialized)
-            {
                 return;
-            }
 
 #if UNITY_IOS
            _extensionProvider.GetExtension<IAppleExtensions>().RestoreTransactions(OnRestoreTransactionFinished);

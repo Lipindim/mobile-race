@@ -1,13 +1,15 @@
-﻿using Tools;
+﻿using Abilities;
+using Tools;
 using UnityEngine;
 using Views;
 
 
 namespace Controllers
 {
-    internal class CarController : BaseController
+    public class CarController : BaseController, IAbilityActivator
     {
         private CarView _view;
+        private GameObject _gameObject;
 
         private string _viewPath = "Prefabs/Car";
 
@@ -15,9 +17,15 @@ namespace Controllers
         {
             _view = LoadView();
         }
+
+        public GameObject GetViewObject()
+        {
+            return _gameObject;
+        }
+
         private CarView LoadView()
         {
-            GameObject objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
+            var objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
             AddGameObjects(objView);
             return objView.GetComponent<CarView>();
         }

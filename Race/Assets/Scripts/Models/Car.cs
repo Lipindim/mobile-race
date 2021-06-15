@@ -1,12 +1,37 @@
-﻿namespace Models
+﻿using Upgrades;
+
+namespace Models
 {
-    internal class Car
+    public class Car : IUpgradableCar
     {
+
+        #region Fields
+
+        private readonly float _defaultSpeed;
+
+        #endregion
+
+
+        #region ClassLifeCycles
+
         public Car(float speed)
         {
-            Speed = speed;
+            _defaultSpeed = speed;
+            Restore();
         }
 
-        public float Speed { get; }
+        #endregion
+
+
+        #region IUpgradableCar
+
+        public float Speed { get; set; }
+
+        public void Restore()
+        {
+            Speed = _defaultSpeed;
+        }
+
+        #endregion
     }
 }
