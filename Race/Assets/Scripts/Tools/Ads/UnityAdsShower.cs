@@ -5,7 +5,7 @@ using UnityEngine.Advertisements;
 
 namespace Tools.Ads
 {
-    internal class UnityAdsShower : MonoBehaviour, IAdsShower, IUnityAdsListener
+    public class UnityAdsShower : MonoBehaviour, IAdsShower, IUnityAdsListener
     {
         private const string _gameId = "4159155";
         private const string _interstitialPlace = "Interstitial_Android";

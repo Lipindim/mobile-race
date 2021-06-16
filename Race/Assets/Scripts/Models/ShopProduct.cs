@@ -3,7 +3,7 @@
 
 namespace Models
 {
-    internal class ShopProduct
+    public class ShopProduct
     {
         public string Id;
         public ProductType CurrentProductType;

@@ -2,7 +2,7 @@
 
 namespace Views
 {
-    internal class BackgroundView : MonoBehaviour
+    public class BackgroundView : MonoBehaviour
     {
         [SerializeField]
         private float _leftBorder;
