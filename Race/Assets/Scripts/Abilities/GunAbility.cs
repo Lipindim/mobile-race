@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using Tools;
 using UnityEngine;
 
@@ -11,11 +10,9 @@ namespace Abilities
         private readonly Rigidbody2D _viewPrefab;
         private readonly float _projectileSpeed;
 
-        public GunAbility(
-            [NotNull] string viewPath,
-            float projectileSpeed)
+        public GunAbility(GameObject prefab, float projectileSpeed)
         {
-            _viewPrefab = ResourceLoader.LoadObject<Rigidbody2D>(viewPath);
+            _viewPrefab = prefab.GetComponent<Rigidbody2D>();
             if (_viewPrefab == null) 
                 throw new InvalidOperationException($"{nameof(GunAbility)} view requires {nameof(Rigidbody2D)} component!");
             _projectileSpeed = projectileSpeed;

@@ -25,9 +25,9 @@ namespace Controllers
 
         private CarView LoadView()
         {
-            var objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
-            AddGameObjects(objView);
-            return objView.GetComponent<CarView>();
+            _gameObject = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
+            AddGameObjects(_gameObject);
+            return _gameObject.GetComponent<CarView>();
         }
     }
 }

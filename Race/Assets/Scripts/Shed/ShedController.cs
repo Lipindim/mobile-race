@@ -19,7 +19,7 @@ namespace Shed
 
         private readonly UpgradeHandlersRepository _upgradeHandlersRepository;
         private readonly ItemsRepository _upgradeItemsRepository;
-        private readonly InventoryModel _inventoryModel;
+        private readonly IInventoryModel _inventoryModel;
         private readonly InventoryController _inventoryController;
 
         private Action _callback;
@@ -27,10 +27,10 @@ namespace Shed
 
         #region ClassLifeCycles
 
-        public ShedController(
-            List<UpgradeItemConfig> upgradeItemConfigs,
+        public ShedController( List<UpgradeItemConfig> upgradeItemConfigs,
             Car car,
-            Transform placeForUi)
+            Transform placeForUi,
+            IInventoryModel inventoryModel)
         {
             if (upgradeItemConfigs == null) 
                 throw new ArgumentNullException(nameof(upgradeItemConfigs));
@@ -45,7 +45,7 @@ namespace Shed
                 = new ItemsRepository(upgradeItemConfigs.Select(value => value.itemConfig).ToList());
             AddController(_upgradeItemsRepository);
 
-            _inventoryModel = new InventoryModel();
+            _inventoryModel = inventoryModel ?? throw new ArgumentNullException(nameof(inventoryModel));
 
             _inventoryController
                 = new InventoryController(_inventoryModel, _upgradeItemsRepository, placeForUi);

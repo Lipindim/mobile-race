@@ -1,4 +1,5 @@
 ﻿using Configs;
+using Inventory;
 using Models;
 using Shed;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace Controllers
     {
         private const string VIEW_PATH = "Prefabs/mainMenu";
         private const string UPGRADES_CONFIG_PATH = "Configs/Upgrades/UpgradeItemConfigDataSource";
-        
+       
+        private readonly IInventoryModel _inventoryModel;
         private readonly Transform _placeForUi;
         private readonly ProfilePlayer _profilePlayer;
 
@@ -21,8 +23,9 @@ namespace Controllers
         private GameObject _viewObject;
 
 
-        public MainMenuController(Transform placeForUi, ProfilePlayer profilePlayer, ICameraTool cameraTool)
+        public MainMenuController(Transform placeForUi, ProfilePlayer profilePlayer, ICameraTool cameraTool, IInventoryModel inventoryModel)
         {
+            _inventoryModel = inventoryModel;
             _placeForUi = placeForUi;
             _profilePlayer = profilePlayer;
             _view = LoadView(placeForUi);
@@ -43,7 +46,7 @@ namespace Controllers
         private void OpenShed()
         {
             var upgradesConfig = Resources.Load<UpgradeItemConfigDataSource>(UPGRADES_CONFIG_PATH);
-            ShedController shedController = new ShedController(upgradesConfig.ItemConfigs.ToList(), _profilePlayer.CurrentCar, _placeForUi);
+            ShedController shedController = new ShedController(upgradesConfig.ItemConfigs.ToList(), _profilePlayer.CurrentCar, _placeForUi, _inventoryModel);
             Hide();
             shedController.Enter(Show);
         }
