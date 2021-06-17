@@ -7,31 +7,32 @@ namespace Controllers
 {
     public class BackgroundMoveController : BaseController
     {
+
+        #region Constants
+
+        private const string VIEW_PATH = "Prefabs/background";
+
+        #endregion
+
+
+        #region Fields
+
         private BackgroundView _view;
         private SubscriptionProperty<float> _leftMove;
         private SubscriptionProperty<float> _rightMove;
 
-        private readonly string _viewPath = "Prefabs/background";
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public BackgroundMoveController(SubscriptionProperty<float> leftMove, SubscriptionProperty<float> rightMove)
         {
-            _view = LoadView();
+            _view = LoadView<BackgroundView>(VIEW_PATH);
             _leftMove = leftMove;
             _rightMove = rightMove;
             _leftMove.SubscribeOnChange(Move);
             _rightMove.SubscribeOnChange(Move);
-        }
-
-        private void Move(float value)
-        {
-            _view.Move(-value);
-        }
-
-        private BackgroundView LoadView()
-        {
-            var objView = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
-            AddGameObjects(objView);
-            return objView.GetComponent<BackgroundView>();
         }
 
         protected override void OnDispose()
@@ -39,5 +40,18 @@ namespace Controllers
             _leftMove.UnSubscriptionOnChange(Move);
             _rightMove.UnSubscriptionOnChange(Move);
         }
+
+        #endregion
+
+
+        #region Methods
+
+        private void Move(float value)
+        {
+            _view.Move(-value);
+        }
+
+        #endregion
+
     }
 }

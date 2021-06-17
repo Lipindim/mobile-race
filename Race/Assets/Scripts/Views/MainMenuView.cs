@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Tools;
+﻿using Tools;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -8,8 +7,11 @@ using UnityEngine.UI;
 
 namespace Views
 {
-    public class MainMenuView : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+    public class MainMenuView : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler, IView
     {
+
+        #region Fields
+
         [SerializeField]
         private Button _buttonStart;
         [SerializeField]
@@ -22,11 +24,27 @@ namespace Views
         private GameObject _trailInstanse;
         private ICameraTool _cameraTool;
 
+        #endregion
+
+
+        #region UnityMethods
+
         private void Awake()
         {
             _trailInstanse = Instantiate(_trail);
             _trailInstanse.SetActive(false);
         }
+
+        protected void OnDestroy()
+        {
+            _buttonStart.onClick.RemoveAllListeners();
+            _buttonBuy.onClick.RemoveAllListeners();
+        }
+
+        #endregion
+
+
+        #region Methods
 
         public void Init(UnityAction startGame, UnityAction buyAction, UnityAction openShed, ICameraTool cameraTool)
         {
@@ -36,11 +54,21 @@ namespace Views
             _buttonShed.onClick.AddListener(openShed);
         }
 
+        #endregion
+
+
+        #region IDragHandler
+
         public void OnDrag(PointerEventData eventData)
         {
             Vector3 touchPosition = _cameraTool.ScreenToWorldPoint(eventData.position);
             _trailInstanse.transform.position = new Vector3(touchPosition.x, touchPosition.y);
         }
+
+        #endregion
+
+
+        #region IPointerDownHandler
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -49,18 +77,32 @@ namespace Views
             _trailInstanse.SetActive(true);
         }
 
+        #endregion
+
+
+        #region IPointerUpHandler
+
         public void OnPointerUp(PointerEventData eventData)
         {
             _trailInstanse.SetActive(false);
         }
 
+        #endregion
 
-        protected void OnDestroy()
+
+        #region IView
+
+        public void Hide()
         {
-            _buttonStart.onClick.RemoveAllListeners();
-            _buttonBuy.onClick.RemoveAllListeners();
+            gameObject.SetActive(false);
         }
 
-        
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        #endregion
+
     }
 }

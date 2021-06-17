@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using Views;
 
 namespace Inventory
 {
-    public interface IInventoryView
+    public interface IInventoryView : IView
     {
         event EventHandler<IItem> Selected;
         event EventHandler<IItem> Deselected;

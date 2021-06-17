@@ -2,6 +2,7 @@
 {
     public class SpeedUpgradeCarHandler : IUpgradeCarHandler
     {
+
         #region Fields
 
         private readonly float _speed;

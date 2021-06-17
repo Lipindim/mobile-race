@@ -9,12 +9,20 @@ namespace Controllers
 {
     internal class MainController : BaseController
     {
+
+        #region Fields
+
         private readonly MainMenuController _mainMenuController;
         private readonly ProfilePlayer _profilePlayer;
         private readonly Transform _placeForUi;
-        private IInventoryModel _inventoryModel;
 
+        private IInventoryModel _inventoryModel;
         private GameController _gameController;
+
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public MainController(Transform placeForUi, IAdsShower adsShower, Camera camera)
         {
@@ -27,6 +35,11 @@ namespace Controllers
             AddController(_mainMenuController);
         }
 
+        #endregion
+
+
+        #region Methods
+
         private void OnStateChange(GameState newState)
         {
             if (newState == GameState.Game)
@@ -37,5 +50,8 @@ namespace Controllers
             }
 
         }
+
+        #endregion
+
     }
 }

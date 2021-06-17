@@ -8,26 +8,39 @@ namespace Controllers
 {
     public class CarController : BaseController, IAbilityActivator
     {
-        private CarView _view;
-        private GameObject _gameObject;
 
-        private string _viewPath = "Prefabs/Car";
+        #region Constants
+
+        private const string VIEW_PATH = "Prefabs/Car";
+
+        #endregion
+
+
+        #region Fields
+
+        private CarView _view;
+
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public CarController()
         {
-            _view = LoadView();
+            _view = LoadView<CarView>(VIEW_PATH);
         }
+
+        #endregion
+
+
+        #region IAbilityActivator
 
         public GameObject GetViewObject()
         {
-            return _gameObject;
+            return _view.gameObject;
         }
 
-        private CarView LoadView()
-        {
-            _gameObject = GameObject.Instantiate(ResourceLoader.LoadPrefab(_viewPath));
-            AddGameObjects(_gameObject);
-            return _gameObject.GetComponent<CarView>();
-        }
+        #endregion
+
     }
 }

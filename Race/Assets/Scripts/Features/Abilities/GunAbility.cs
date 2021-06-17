@@ -1,5 +1,4 @@
 ﻿using System;
-using Tools;
 using UnityEngine;
 
 
@@ -7,8 +6,16 @@ namespace Abilities
 {
     public class GunAbility : IAbility
     {
+
+        #region Fields
+
         private readonly Rigidbody2D _viewPrefab;
         private readonly float _projectileSpeed;
+
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public GunAbility(GameObject prefab, float projectileSpeed)
         {
@@ -18,11 +25,18 @@ namespace Abilities
             _projectileSpeed = projectileSpeed;
         }
 
+        #endregion
+
+
+        #region IAbility
+
         public void Apply(IAbilityActivator activator)
         {
             var projectile = GameObject.Instantiate(_viewPrefab);
             projectile.AddForce(activator.GetViewObject().transform.right * _projectileSpeed, ForceMode2D.Force);
         }
-    }
 
+        #endregion
+
+    }
 }

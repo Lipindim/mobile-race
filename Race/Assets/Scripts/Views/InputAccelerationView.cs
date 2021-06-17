@@ -13,11 +13,6 @@ namespace Views
             UpdateManager.SubscribeToUpdate(Move);
         }
 
-        private void OnDestroy()
-        {
-            UpdateManager.UnsubscribeFromUpdate(Move);
-        }
-
         private void Move()
         {
             Vector3 direction = Vector3.zero;
@@ -28,6 +23,12 @@ namespace Views
                 direction.Normalize();
 
             OnRightMove(direction.sqrMagnitude / 20 * _speed);
+        }
+
+
+        private void OnDestroy()
+        {
+            UpdateManager.UnsubscribeFromUpdate(Move);
         }
     }
 }

@@ -9,16 +9,23 @@ namespace Inventory
 {
     public class InventoryView : MonoBehaviour, IInventoryView
     {
+
+        #region Fields
+
         [SerializeField]
         private Button _exitButton;
         [SerializeField]
         private ItemView[] _items;
 
-        public event EventHandler<IItem> Selected;
-        public event EventHandler<IItem> Deselected;
-
         private List<IItem> _itemInfoCollection;
 
+        #endregion
+
+
+        #region IInventoryView
+
+        public event EventHandler<IItem> Selected;
+        public event EventHandler<IItem> Deselected;
 
         public void Display(List<IItem> itemInfoCollection)
         {
@@ -29,8 +36,20 @@ namespace Inventory
                 _items[i].Display(itemInfoCollection[i]);
                 _items[i].Selected += OnSelected;
                 _items[i].Deselected += OnDeselected;
+                _items[i].Show();
             }
+
+            for (int i = itemInfoCollection.Count; i < _items.Length; i++)
+                _items[i].Hide();
         }
+
+        public void Initialize(UnityAction exit)
+        {
+            _exitButton.onClick.AddListener(exit);
+            _exitButton.onClick.AddListener(Unsubscribe);
+        }
+
+        #endregion
 
         protected virtual void OnSelected(object sender, IItem e)
         {
@@ -42,11 +61,7 @@ namespace Inventory
             Deselected?.Invoke(this, e);
         }
 
-        public void Initialize(UnityAction exit)
-        {
-            _exitButton.onClick.AddListener(exit);
-            _exitButton.onClick.AddListener(Unsubscribe);
-        }
+        
 
         private void Unsubscribe()
         {
@@ -58,5 +73,20 @@ namespace Inventory
 
             _exitButton.onClick.RemoveAllListeners();
         }
+
+        #region IView
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        #endregion
+
     }
 }

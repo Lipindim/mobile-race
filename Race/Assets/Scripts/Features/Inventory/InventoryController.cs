@@ -10,15 +10,27 @@ namespace Inventory
 {
     public class InventoryController : BaseController, IInventoryController
     {
+
+        #region Constants
+
         private const string VIEW_PATH = "Prefabs/Inventory";
+
+        #endregion
+
+
+        #region Fields
 
         private readonly IInventoryModel _inventoryModel;
         private readonly IItemsRepository _itemsRepository;
         private readonly IInventoryView _inventoryView;
         private readonly Transform _placeForUi;
 
-        private GameObject _viewObject;
         private Action _callback;
+
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public InventoryController(
             IInventoryModel inventoryModel,
@@ -29,16 +41,30 @@ namespace Inventory
             _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
             _placeForUi = placeForUi ?? throw new ArgumentNullException(nameof(_placeForUi));
 
-            _inventoryView = LoadView();
+            _inventoryView = LoadView<IInventoryView>(VIEW_PATH, placeForUi);
             _inventoryView.Initialize(HideInventory);
 
             HideInventory();
+            Subscribe();
+        }
 
+        protected override void OnDispose()
+        {
+            Unsubscribe();
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        private void Subscribe()
+        {
             _inventoryView.Selected += EquipItem;
             _inventoryView.Deselected += UnequipItem;
         }
 
-        protected override void OnDispose()
+        private void Unsubscribe()
         {
             _inventoryView.Selected -= EquipItem;
             _inventoryView.Deselected -= UnequipItem;
@@ -54,16 +80,9 @@ namespace Inventory
             _inventoryModel.EquipItem(e);
         }
 
-        private InventoryView LoadView()
-        {
-            _viewObject = GameObject.Instantiate(ResourceLoader.LoadPrefab(VIEW_PATH), _placeForUi);
-            AddGameObjects(_viewObject);
-            return _viewObject.GetComponent<InventoryView>();
-        }
-
         public void HideInventory()
         {
-            _viewObject.SetActive(false);
+            _inventoryView.Hide();
             _callback?.Invoke();
         }
 
@@ -71,8 +90,10 @@ namespace Inventory
         {
             _callback = callback;
             _inventoryView.Display(_itemsRepository.Items.Values.ToList());
-            _viewObject.SetActive(true);
+            _inventoryView.Show();
         }
-    }
 
+        #endregion
+
+    }
 }

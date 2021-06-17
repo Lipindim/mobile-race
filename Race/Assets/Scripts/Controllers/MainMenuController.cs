@@ -12,26 +12,47 @@ namespace Controllers
 {
     public class MainMenuController : BaseController
     {
+
+        #region Constants
+
         private const string VIEW_PATH = "Prefabs/mainMenu";
         private const string UPGRADES_CONFIG_PATH = "Configs/Upgrades/UpgradeItemConfigDataSource";
-       
+
+        #endregion
+
+
+        #region Fields
+
         private readonly IInventoryModel _inventoryModel;
         private readonly Transform _placeForUi;
         private readonly ProfilePlayer _profilePlayer;
 
         private MainMenuView _view;
-        private GameObject _viewObject;
 
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public MainMenuController(Transform placeForUi, ProfilePlayer profilePlayer, ICameraTool cameraTool, IInventoryModel inventoryModel)
         {
             _inventoryModel = inventoryModel;
             _placeForUi = placeForUi;
             _profilePlayer = profilePlayer;
-            _view = LoadView(placeForUi);
+            _view = LoadView<MainMenuView>(VIEW_PATH, placeForUi);
             _view.Init(StartGame, Buy, OpenShed, cameraTool);
             _profilePlayer.Shop.OnSuccessPurchase.SubscribeOnChange(PurchaseCompleted);
         }
+
+        protected override void OnDispose()
+        {
+            _profilePlayer.Shop.OnSuccessPurchase.UnSubscriptionOnChange(PurchaseCompleted);
+        }
+
+        #endregion
+
+
+        #region Fields
 
         private void PurchaseCompleted()
         {
@@ -47,26 +68,8 @@ namespace Controllers
         {
             var upgradesConfig = Resources.Load<UpgradeItemConfigDataSource>(UPGRADES_CONFIG_PATH);
             ShedController shedController = new ShedController(upgradesConfig.ItemConfigs.ToList(), _profilePlayer.CurrentCar, _placeForUi, _inventoryModel);
-            Hide();
-            shedController.Enter(Show);
-        }
-
-        private void Hide()
-        {
-            _viewObject.SetActive(false);
-        }
-
-        private void Show()
-        {
-            _viewObject.SetActive(true);
-        }
-
-        private MainMenuView LoadView(Transform placeForUi)
-        {
-            var prefab = ResourceLoader.LoadPrefab(VIEW_PATH);
-            _viewObject = Object.Instantiate(prefab, placeForUi, false);
-            AddGameObjects(_viewObject);
-            return _viewObject.GetComponent<MainMenuView>();
+            _view.Hide();
+            shedController.Enter(_view.Show);
         }
 
         private void StartGame()
@@ -75,9 +78,7 @@ namespace Controllers
             _profilePlayer.AnalyticTools.SendMessage("start_game");
         }
 
-        protected override void OnDispose()
-        {
-            _profilePlayer.Shop.OnSuccessPurchase.UnSubscriptionOnChange(PurchaseCompleted);
-        }
+        #endregion
+
     }
 }
