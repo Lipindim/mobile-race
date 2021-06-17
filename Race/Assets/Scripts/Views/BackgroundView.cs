@@ -4,6 +4,9 @@ namespace Views
 {
     public class BackgroundView : MonoBehaviour
     {
+
+        #region Fields
+
         [SerializeField]
         private float _leftBorder;
         [SerializeField]
@@ -11,6 +14,11 @@ namespace Views
 
         [SerializeField]
         private float _relativeSpeedRate;
+
+        #endregion
+
+
+        #region Methods
 
         public void Move(float value)
         {
@@ -21,5 +29,8 @@ namespace Views
            else if (transform.position.x >= _rightBorder)
                 transform.position = new Vector3(_leftBorder + (_rightBorder - position.x), position.y, position.z);
         }
+
+        #endregion
+
     }
 }

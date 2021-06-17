@@ -4,7 +4,6 @@ using Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Tools;
 using UnityEngine;
 
 
@@ -12,12 +11,25 @@ namespace Abilities
 {
     public class AbilitiesController : BaseController
     {
+
+        #region Constants
+
         private const string VIEW_PATH = "Prefabs/Abilities";
+
+        #endregion
+
+
+        #region Fields
 
         private readonly IInventoryModel _inventoryModel;
         private readonly IAbilityRepository _abilityRepository;
         private readonly IAbilityCollectionView _abilityCollectionView;
         private readonly IAbilityActivator _abilityActivator;
+
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public AbilitiesController(
             IAbilityActivator abilityActivator,
@@ -29,17 +41,15 @@ namespace Abilities
             _inventoryModel = inventoryModel ?? throw new ArgumentNullException(nameof(inventoryModel));
             _abilityRepository = abilityRepository ?? throw new ArgumentNullException(nameof(abilityRepository));
 
-            _abilityCollectionView = LoadView(placeForUi);
+            _abilityCollectionView = LoadView<IAbilityCollectionView>(VIEW_PATH, placeForUi);
             _abilityCollectionView.Display(GetAbilities());
             _abilityCollectionView.UseRequested += OnAbilityUseRequested;
         }
 
-        private IAbilityCollectionView LoadView(Transform placeForUi)
-        {
-            var viewObject = GameObject.Instantiate(ResourceLoader.LoadPrefab(VIEW_PATH), placeForUi);
-            AddGameObjects(viewObject);
-            return viewObject.GetComponent<IAbilityCollectionView>();
-        }
+        #endregion
+
+
+        #region Methods
 
         private void OnAbilityUseRequested(object sender, IItem e)
         {
@@ -56,6 +66,7 @@ namespace Abilities
                 .ToList();
         }
 
-    }
+        #endregion
 
+    }
 }

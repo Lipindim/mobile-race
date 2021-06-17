@@ -14,11 +14,6 @@ namespace Views
             UpdateManager.SubscribeToUpdate(Move);
         }
 
-        private void OnDestroy()
-        {
-            UpdateManager.UnsubscribeFromUpdate(Move);
-        }
-
         private void Move()
         {
             float moveStep = 10 * Time.deltaTime * CrossPlatformInputManager.GetAxis("Horizontal");
@@ -27,6 +22,12 @@ namespace Views
             else if (moveStep < 0)
                 OnLeftMove(moveStep);
         }
-    }
 
+
+        private void OnDestroy()
+        {
+            UpdateManager.UnsubscribeFromUpdate(Move);
+        }
+
+    }
 }

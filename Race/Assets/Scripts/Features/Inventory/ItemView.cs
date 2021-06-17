@@ -3,22 +3,36 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Views;
 
 
 namespace Inventory
 {
-    public class ItemView : MonoBehaviour, IPointerDownHandler
+    public class ItemView : MonoBehaviour, IPointerDownHandler, IView
     {
+
+        #region Fields
+
         [SerializeField]
         private Text _title;
         [SerializeField]
         private Image _borderImage;
 
+        private IItem _item;
+        private bool _selected;
+
+        #endregion
+
+
+        #region Events
+
         public event EventHandler<IItem> Selected;
         public event EventHandler<IItem> Deselected;
 
-        private IItem _item;
-        private bool _selected;
+        #endregion
+
+
+        #region Methods
 
         public void Display(IItem item)
         {
@@ -44,5 +58,23 @@ namespace Inventory
             else
                 _borderImage.color = Color.gray;
         }
+
+        #endregion
+
+
+        #region IView
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        #endregion
+
     }
 }

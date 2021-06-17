@@ -7,6 +7,13 @@ namespace Models
 {
     public class ProfilePlayer
     {
+
+        public SubscriptionProperty<GameState> CurrentState { get; }
+        public Car CurrentCar { get; }
+        public IAnalyticTools AnalyticTools { get; }
+        public IShop Shop { get; }
+
+
         public ProfilePlayer(float speedCar)
         {
             CurrentState = new SubscriptionProperty<GameState>();
@@ -21,12 +28,6 @@ namespace Models
                 }
             });
         }
-
-        public SubscriptionProperty<GameState> CurrentState { get; }
-
-        public Car CurrentCar { get; }
-
-        public IAnalyticTools AnalyticTools { get; }
-        public IShop Shop { get; }
+        
     }
 }

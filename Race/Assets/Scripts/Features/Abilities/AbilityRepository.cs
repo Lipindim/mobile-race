@@ -8,11 +8,29 @@ namespace Abilities
 {
     public class AbilityRepository : IAbilityRepository
     {
+
+        #region Constants
+
         private const string ABILITIES_CONFIG = "Configs/Abilities/AbilityItemCollectionConfig";
+
+        #endregion
+
+
+        #region Fields
+
+        private Dictionary<int, IAbility> _abilityMapByItmId;
+
+        #endregion
+
+
+        #region IAbilityRepository
 
         public IReadOnlyDictionary<int, IAbility> AbilityMapByItemId => _abilityMapByItmId;
 
-        private Dictionary<int, IAbility> _abilityMapByItmId;
+        #endregion
+
+
+        #region ClassLifeCycles
 
         public AbilityRepository()
         {
@@ -22,6 +40,11 @@ namespace Abilities
             foreach (AbilityItemConfig abilityConfig in config.Abilities)
                 CreateAbility(abilityConfig);
         }
+
+        #endregion
+
+
+        #region Methods
 
         private void CreateAbility(AbilityItemConfig abilityConfig)
         {
@@ -35,5 +58,8 @@ namespace Abilities
                     throw new ArgumentException($"Unsupported ability type: {abilityConfig.Type}");
             }
         }
+
+        #endregion
+
     }
 }

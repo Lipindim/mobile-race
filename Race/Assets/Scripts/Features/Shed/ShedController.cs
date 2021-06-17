@@ -15,14 +15,18 @@ namespace Shed
 {
     public class ShedController : BaseController, IShedController
     {
-        private readonly Car _car;
 
+        #region Fields
+
+        private readonly Car _car;
         private readonly UpgradeHandlersRepository _upgradeHandlersRepository;
         private readonly ItemsRepository _upgradeItemsRepository;
         private readonly IInventoryModel _inventoryModel;
-        private readonly InventoryController _inventoryController;
+        private readonly IInventoryController _inventoryController;
 
         private Action _callback;
+
+        #endregion
 
 
         #region ClassLifeCycles
@@ -49,7 +53,6 @@ namespace Shed
 
             _inventoryController
                 = new InventoryController(_inventoryModel, _upgradeItemsRepository, placeForUi);
-            AddController(_inventoryController);
         }
 
         #endregion
