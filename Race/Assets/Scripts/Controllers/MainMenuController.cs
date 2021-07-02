@@ -2,6 +2,7 @@
 using Inventory;
 using Models;
 using Shed;
+using System;
 using System.Linq;
 using Tools;
 using UnityEngine;
@@ -10,7 +11,7 @@ using Views;
 
 namespace Controllers
 {
-    public class MainMenuController : BaseController
+    public class MainMenuController : BaseController, IShowable
     {
 
         #region Constants
@@ -23,11 +24,12 @@ namespace Controllers
 
         #region Fields
 
+        private readonly DailyRewardController _rewardController;
         private readonly IInventoryModel _inventoryModel;
         private readonly Transform _placeForUi;
         private readonly ProfilePlayer _profilePlayer;
-
-        private MainMenuView _view;
+        private readonly ShedController _shedController;
+        private readonly MainMenuView _view;
 
         #endregion
 
@@ -40,36 +42,41 @@ namespace Controllers
             _placeForUi = placeForUi;
             _profilePlayer = profilePlayer;
             _view = LoadView<MainMenuView>(VIEW_PATH, placeForUi);
-            _view.Init(StartGame, Buy, OpenShed, cameraTool);
-            _profilePlayer.Shop.OnSuccessPurchase.SubscribeOnChange(PurchaseCompleted);
+            _view.Init(cameraTool);
+            _rewardController = new DailyRewardController(placeForUi, profilePlayer);
+            var upgradesConfig = Resources.Load<UpgradeItemConfigDataSource>(UPGRADES_CONFIG_PATH);
+            _shedController = new ShedController(upgradesConfig.ItemConfigs.ToList(), _profilePlayer, _placeForUi, _inventoryModel);
+
+            Subscribe();
         }
 
         protected override void OnDispose()
         {
-            _profilePlayer.Shop.OnSuccessPurchase.UnSubscriptionOnChange(PurchaseCompleted);
+            Unsubscribe();
         }
 
         #endregion
 
 
-        #region Fields
+        #region Methods
 
-        private void PurchaseCompleted()
+        private void Subscribe()
         {
-            Debug.Log("Покупка совершена.");
+            _view.ButtonStart.onClick.AddListener(StartGame);
+            _view.ButtonShed.onClick.AddListener(OpenShed);
+            _view.ButtonReward.onClick.AddListener(OpenReward);
         }
 
-        private void Buy()
+        private void Unsubscribe()
         {
-            _profilePlayer.Shop.Buy("1");
+            _view.ButtonStart.onClick.RemoveAllListeners();
+            _view.ButtonShed.onClick.RemoveAllListeners();
+            _view.ButtonReward.onClick.RemoveAllListeners();
         }
 
         private void OpenShed()
         {
-            var upgradesConfig = Resources.Load<UpgradeItemConfigDataSource>(UPGRADES_CONFIG_PATH);
-            ShedController shedController = new ShedController(upgradesConfig.ItemConfigs.ToList(), _profilePlayer.CurrentCar, _placeForUi, _inventoryModel);
-            _view.Hide();
-            shedController.Enter(_view.Show);
+            _profilePlayer.CurrentState.Value = GameState.Shed;
         }
 
         private void StartGame()
@@ -78,7 +85,48 @@ namespace Controllers
             _profilePlayer.AnalyticTools.SendMessage("start_game");
         }
 
+        private void OpenReward()
+        {
+            _profilePlayer.CurrentState.Value = GameState.Reward;
+        }
+
+        public void ShowReward()
+        {
+            HideAll();
+            _rewardController.Show();
+        }
+
+        public void ShowShed()
+        {
+            HideAll();
+            _shedController.Show();
+        }
+
+        private void HideAll()
+        {
+            _view.Hide();
+            _shedController.Hide();
+            _rewardController.Hide();
+        }
+
         #endregion
+
+
+        #region IShowable
+
+        public void Show()
+        {
+            HideAll();
+            _view.Show();
+        }
+
+        public void Hide()
+        {
+            HideAll();
+        }
+
+        #endregion
+
 
     }
 }

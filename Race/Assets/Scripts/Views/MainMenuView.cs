@@ -1,13 +1,12 @@
 ﻿using Tools;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
 namespace Views
 {
-    public class MainMenuView : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler, IView
+    public class MainMenuView : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler, IShowable
     {
 
         #region Fields
@@ -15,14 +14,23 @@ namespace Views
         [SerializeField]
         private Button _buttonStart;
         [SerializeField]
-        private Button _buttonBuy;
-        [SerializeField]
         private Button _buttonShed;
+        [SerializeField]
+        private Button _buttonReward;
         [SerializeField]
         private GameObject _trail;
 
         private GameObject _trailInstanse;
         private ICameraTool _cameraTool;
+
+        #endregion
+
+
+        #region Properties
+
+        public Button ButtonStart => _buttonStart;
+        public Button ButtonShed => _buttonShed;
+        public Button ButtonReward => _buttonReward;
 
         #endregion
 
@@ -35,23 +43,14 @@ namespace Views
             _trailInstanse.SetActive(false);
         }
 
-        protected void OnDestroy()
-        {
-            _buttonStart.onClick.RemoveAllListeners();
-            _buttonBuy.onClick.RemoveAllListeners();
-        }
-
         #endregion
 
 
         #region Methods
 
-        public void Init(UnityAction startGame, UnityAction buyAction, UnityAction openShed, ICameraTool cameraTool)
+        public void Init(ICameraTool cameraTool)
         {
             _cameraTool = cameraTool;
-            _buttonStart.onClick.AddListener(startGame);
-            _buttonBuy.onClick.AddListener(buyAction);
-            _buttonShed.onClick.AddListener(openShed);
         }
 
         #endregion
@@ -90,7 +89,7 @@ namespace Views
         #endregion
 
 
-        #region IView
+        #region IShowable
 
         public void Hide()
         {

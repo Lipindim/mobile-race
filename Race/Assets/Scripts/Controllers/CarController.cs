@@ -6,7 +6,7 @@ using Views;
 
 namespace Controllers
 {
-    public class CarController : BaseController, IAbilityActivator
+    public class CarController : BaseController, IAbilityActivator, IShowable
     {
 
         #region Constants
@@ -38,6 +38,20 @@ namespace Controllers
         public GameObject GetViewObject()
         {
             return _view.gameObject;
+        }
+
+        #endregion
+
+        #region IShowable
+
+        public void Show()
+        {
+            _view.Show();
+        }
+
+        public void Hide()
+        {
+            _view.Hide();
         }
 
         #endregion

@@ -13,18 +13,16 @@ using Upgrades;
 
 namespace Shed
 {
-    public class ShedController : BaseController, IShedController
+    public class ShedController : BaseController, IShowable
     {
 
         #region Fields
 
-        private readonly Car _car;
+        private readonly ProfilePlayer _profilePlayer;
         private readonly UpgradeHandlersRepository _upgradeHandlersRepository;
         private readonly ItemsRepository _upgradeItemsRepository;
         private readonly IInventoryModel _inventoryModel;
-        private readonly IInventoryController _inventoryController;
-
-        private Action _callback;
+        private readonly IShowable _inventoryController;
 
         #endregion
 
@@ -32,15 +30,11 @@ namespace Shed
         #region ClassLifeCycles
 
         public ShedController( List<UpgradeItemConfig> upgradeItemConfigs,
-            Car car,
+            ProfilePlayer profilePlayer,
             Transform placeForUi,
             IInventoryModel inventoryModel)
         {
-            if (upgradeItemConfigs == null) 
-                throw new ArgumentNullException(nameof(upgradeItemConfigs));
-
-            _car = car ?? throw new ArgumentNullException(nameof(car));
-
+            _profilePlayer = profilePlayer;
             _upgradeHandlersRepository
                 = new UpgradeHandlersRepository(upgradeItemConfigs);
             AddController(_upgradeHandlersRepository);
@@ -52,27 +46,7 @@ namespace Shed
             _inventoryModel = inventoryModel ?? throw new ArgumentNullException(nameof(inventoryModel));
 
             _inventoryController
-                = new InventoryController(_inventoryModel, _upgradeItemsRepository, placeForUi);
-        }
-
-        #endregion
-
-
-        #region IShedController
-
-        public void Enter(Action callback)
-        {
-            _callback = callback;
-            _inventoryController.ShowInventory(Exit);
-            Debug.Log($"Enter: car has speed : {_car.Speed}");
-        }
-
-        public void Exit()
-        {
-            UpgradeCarWithEquippedItems(
-                _car, _inventoryModel.GetEquippedItems(), _upgradeHandlersRepository.UpgradeItems);
-            Debug.Log($"Exit: car has speed : {_car.Speed}");
-            _callback?.Invoke();
+                = new InventoryController(_inventoryModel, _upgradeItemsRepository, placeForUi, profilePlayer);
         }
 
         private void UpgradeCarWithEquippedItems(
@@ -85,6 +59,25 @@ namespace Shed
                 if (upgradeHandlers.TryGetValue(equippedItem.Id, out var handler))
                     handler.Upgrade(upgradableCar);
             }
+        }
+
+        #endregion
+
+
+        #region IShowable
+
+        public void Hide()
+        {
+            UpgradeCarWithEquippedItems(
+                _profilePlayer.CurrentCar, _inventoryModel.GetEquippedItems(), _upgradeHandlersRepository.UpgradeItems);
+            Debug.Log($"Exit: car has speed : {_profilePlayer.CurrentCar.Speed}");
+            _inventoryController.Hide();
+        }
+
+        public void Show()
+        {
+            _inventoryController.Show();
+            Debug.Log($"Enter: car has speed : {_profilePlayer.CurrentCar.Speed}");
         }
 
         #endregion

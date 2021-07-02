@@ -1,8 +1,9 @@
 ﻿using Items;
 using System;
 using System.Collections.Generic;
-using UnityEngine.Events;
+using UnityEngine.UI;
 using Views;
+
 
 namespace Inventory
 {
@@ -11,6 +12,6 @@ namespace Inventory
         event EventHandler<IItem> Selected;
         event EventHandler<IItem> Deselected;
         void Display(List<IItem> items);
-        void Initialize(UnityAction exit);
+        Button Exit { get; }
     }
 }

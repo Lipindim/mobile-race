@@ -2,7 +2,7 @@
 
 namespace Views
 {
-    public class BackgroundView : MonoBehaviour
+    public class BackgroundView : BaseShowableView
     {
 
         #region Fields
