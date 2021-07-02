@@ -5,7 +5,7 @@ using Views;
 
 namespace Controllers
 {
-    public class BackgroundMoveController : BaseController
+    public class BackgroundMoveController : BaseController, IShowable
     {
 
         #region Constants
@@ -52,6 +52,22 @@ namespace Controllers
         }
 
         #endregion
+
+
+        #region IShowable
+
+        public void Hide()
+        {
+            _view.Hide();
+        }
+
+        public void Show()
+        {
+            _view.Show();
+        }
+
+        #endregion
+
 
     }
 }

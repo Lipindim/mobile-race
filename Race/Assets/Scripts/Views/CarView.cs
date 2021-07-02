@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace Views
 {
-    public class CarView : MonoBehaviour
+    public class CarView : BaseShowableView
     {
     }
 }

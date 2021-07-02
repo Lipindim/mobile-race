@@ -1,5 +1,6 @@
 ﻿using Controllers;
 using Items;
+using Models;
 using System;
 using System.Linq;
 using Tools;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace Inventory
 {
-    public class InventoryController : BaseController, IInventoryController
+    public class InventoryController : BaseController, IShowable
     {
 
         #region Constants
@@ -23,9 +24,7 @@ namespace Inventory
         private readonly IInventoryModel _inventoryModel;
         private readonly IItemsRepository _itemsRepository;
         private readonly IInventoryView _inventoryView;
-        private readonly Transform _placeForUi;
-
-        private Action _callback;
+        private readonly ProfilePlayer _profilePlayer;
 
         #endregion
 
@@ -35,16 +34,17 @@ namespace Inventory
         public InventoryController(
             IInventoryModel inventoryModel,
             IItemsRepository itemsRepository,
-            Transform placeForUi)
+            Transform placeForUi,
+            ProfilePlayer profilePlayer)
         {
+            _profilePlayer = profilePlayer;
             _inventoryModel = inventoryModel ?? throw new ArgumentNullException(nameof(inventoryModel));
             _itemsRepository = itemsRepository ?? throw new ArgumentNullException(nameof(itemsRepository));
-            _placeForUi = placeForUi ?? throw new ArgumentNullException(nameof(_placeForUi));
+            if (placeForUi == null)
+                throw new ArgumentNullException(nameof(placeForUi));
 
             _inventoryView = LoadView<IInventoryView>(VIEW_PATH, placeForUi);
-            _inventoryView.Initialize(HideInventory);
 
-            HideInventory();
             Subscribe();
         }
 
@@ -62,6 +62,12 @@ namespace Inventory
         {
             _inventoryView.Selected += EquipItem;
             _inventoryView.Deselected += UnequipItem;
+            _inventoryView.Exit.onClick.AddListener(GoToMenu);
+        }
+
+        private void GoToMenu()
+        {
+            _profilePlayer.CurrentState.Value = GameState.Menu;
         }
 
         private void Unsubscribe()
@@ -80,15 +86,18 @@ namespace Inventory
             _inventoryModel.EquipItem(e);
         }
 
-        public void HideInventory()
+        #endregion
+
+
+        #region IShowable
+
+        public void Hide()
         {
             _inventoryView.Hide();
-            _callback?.Invoke();
         }
 
-        public void ShowInventory(Action callback)
+        public void Show()
         {
-            _callback = callback;
             _inventoryView.Display(_itemsRepository.Items.Values.ToList());
             _inventoryView.Show();
         }

@@ -13,12 +13,15 @@ namespace Models
         public IAnalyticTools AnalyticTools { get; }
         public IShop Shop { get; }
 
+        public Currencies Currencies { get; }
+
 
         public ProfilePlayer(float speedCar)
         {
             CurrentState = new SubscriptionProperty<GameState>();
             CurrentCar = new Car(speedCar);
             AnalyticTools = new UnityAnalyticTools();
+            Currencies = new Currencies();
             Shop = new ShopTools(new List<ShopProduct>()
             {
                 new ShopProduct()

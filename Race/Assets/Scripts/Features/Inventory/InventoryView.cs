@@ -22,6 +22,13 @@ namespace Inventory
         #endregion
 
 
+        #region Properties
+
+        public Button Exit => _exitButton;
+
+        #endregion
+
+
         #region IInventoryView
 
         public event EventHandler<IItem> Selected;
@@ -43,11 +50,6 @@ namespace Inventory
                 _items[i].Hide();
         }
 
-        public void Initialize(UnityAction exit)
-        {
-            _exitButton.onClick.AddListener(exit);
-            _exitButton.onClick.AddListener(Unsubscribe);
-        }
 
         #endregion
 

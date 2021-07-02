@@ -13,6 +13,7 @@ namespace Controllers
         #region Fields
 
         private readonly MainMenuController _mainMenuController;
+
         private readonly ProfilePlayer _profilePlayer;
         private readonly Transform _placeForUi;
 
@@ -33,6 +34,10 @@ namespace Controllers
             _inventoryModel = new InventoryModel();
             _mainMenuController = new MainMenuController(placeForUi, _profilePlayer, cameraTool, _inventoryModel);
             AddController(_mainMenuController);
+            _gameController = new GameController(_profilePlayer, _inventoryModel, _placeForUi);
+            AddController(_gameController);
+
+            _profilePlayer.CurrentState.Value = GameState.Menu;
         }
 
         #endregion
@@ -42,13 +47,31 @@ namespace Controllers
 
         private void OnStateChange(GameState newState)
         {
-            if (newState == GameState.Game)
+            switch (newState)
             {
-                _mainMenuController.Dispose();
-                _gameController = new GameController(_profilePlayer, _inventoryModel, _placeForUi);
-                AddController(_gameController);
+                case GameState.Menu:
+                    _mainMenuController.Show();
+                    _gameController.Hide();
+                    break;
+                case GameState.Game:
+                    _mainMenuController.Hide();
+                    _gameController.Show();
+                    break;
+                case GameState.Reward:
+                    _mainMenuController.ShowReward();
+                    _gameController.Hide();
+                    break;
+                case GameState.Fight:
+                    _mainMenuController.Hide();
+                    _gameController.ShowFight();
+                    break;
+                case GameState.Shed:
+                    _gameController.Hide();
+                    _mainMenuController.ShowShed();
+                    break;
+                default:
+                    break;
             }
-
         }
 
         #endregion
