@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 4018303286
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d5b2d88452df71dde7695edac9df7794
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4df8c69f2c8a6ad9e3cbf82bb83e4dc3
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/UI/Resource Vector Graphics/diamond_icon.png
+- Assets/UI/Resource Vector Graphics/wood_icon.png
+Dependencies: []

@@ -1,7 +1,7 @@
 ﻿using Inventory;
 using Models;
+using System;
 using Tools;
-using Tools.Ads;
 using UnityEngine;
 
 
@@ -25,7 +25,7 @@ namespace Controllers
 
         #region ClassLifeCycles
 
-        public MainController(Transform placeForUi, IAdsShower adsShower, Camera camera)
+        public MainController(Transform placeForUi, Camera camera)
         {
             _placeForUi = placeForUi;
             _profilePlayer = new ProfilePlayer(1.0f);
@@ -70,7 +70,7 @@ namespace Controllers
                     _mainMenuController.ShowShed();
                     break;
                 default:
-                    break;
+                    throw new ArgumentException($"Unkonwn state: {newState}");
             }
         }
 
