@@ -1,8 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-
-
-namespace Views
+﻿namespace Views
 {
     public class CarView : BaseShowableView
     {

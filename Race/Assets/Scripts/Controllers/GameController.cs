@@ -1,7 +1,6 @@
 ﻿using Abilities;
 using Inventory;
 using Models;
-using System;
 using Tools;
 using UnityEngine;
 
@@ -41,11 +40,6 @@ namespace Controllers
             AddController(abilitiesController);
         }
 
-        private void GoToFight()
-        {
-            _profilePlayer.CurrentState.Value = GameState.Fight;
-        }
-
         public void Hide()
         {
             HideAll();
@@ -58,7 +52,7 @@ namespace Controllers
             _view.Show();
             _fightController.Hide();
         }
-
+        
         public void ShowFight()
         {
             HideAll();
@@ -71,6 +65,11 @@ namespace Controllers
             _backgroundMoveController.Hide();
             _view.Hide();
             _fightController.Hide();
+        }
+
+        private void GoToFight()
+        {
+            _profilePlayer.CurrentState.Value = GameState.Fight;
         }
     }
 }
