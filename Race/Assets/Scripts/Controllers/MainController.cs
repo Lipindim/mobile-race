@@ -16,6 +16,7 @@ namespace Controllers
 
         private readonly ProfilePlayer _profilePlayer;
         private readonly Transform _placeForUi;
+        private readonly NotificationService _notificationService;
 
         private IInventoryModel _inventoryModel;
         private GameController _gameController;
@@ -38,6 +39,7 @@ namespace Controllers
             AddController(_gameController);
 
             _profilePlayer.CurrentState.Value = GameState.Menu;
+            _notificationService = new NotificationService();
         }
 
         #endregion
@@ -64,6 +66,7 @@ namespace Controllers
                 case GameState.Fight:
                     _mainMenuController.Hide();
                     _gameController.ShowFight();
+                    _notificationService.CreateNotification("Figh begun!", "Defeat the enemy and get a reward");
                     break;
                 case GameState.Shed:
                     _gameController.Hide();
